@@ -44,6 +44,10 @@
                         </select>
                         <div class="form-text">Отображаются только книги с количеством > 0</div>
                     </div>
+                    <div class="col-md-6">
+                        <label for="quantity" class="form-label">Количество</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" min="1" th:value="1" required>
+                    </div>
                 </div>
                 <div class="mt-3">
                     <button type="submit" class="btn btn-success">Оформить продажу</button>
@@ -63,7 +67,9 @@
                         <th>ID продажи</th>
                         <th>Клиент</th>
                         <th>Книга</th>
-                        <th>Цена продажи</th>
+                        <th>Цена за штуку</th>
+                        <th>Количество</th>
+                        <th>Сумма</th>
                         <th>Дата и время</th>
                         <th>Действия</th>
                     </tr>
@@ -74,6 +80,8 @@
                         <td th:text="${sale.client.firstName + ' ' + sale.client.lastName}"></td>
                         <td th:text="${sale.book.name + ' (' + sale.book.author + ')'}"></td>
                         <td th:text="${sale.salePrice + '₽'}"></td>
+                        <td th:text="${sale.quantity}"></td>
+                        <td th:text="${sale.totalPrice + '₽'}"></td>
                         <td th:text="${#temporals.format(sale.saleTime, 'dd.MM.yyyy HH:mm')}"></td>
                         <td>
                             <a th:href="@{/sales/delete/{id}(id=${sale.id})}"

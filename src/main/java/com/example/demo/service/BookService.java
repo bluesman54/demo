@@ -9,7 +9,7 @@ public interface BookService {
     Book findById(Long id);
     Book save(Book book);
     Book update(Long id, Book book);
-    void sale(Long id);
-    void recovery(Long id);
+    void sale(Long id, Integer quantity);
+    void recovery(Long id, Integer quantity);
     void delete(Long id);
 }

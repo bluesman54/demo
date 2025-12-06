@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -27,28 +28,36 @@ public class SaleServiceImpl implements SaleService {
         return saleRepository.findAll();
     }
 
-    private Sale buildSale(Client client, Book book) {
+    private Sale buildSale(Client client, Book book, Integer quantity) {
+        BigDecimal totalPrice = book.getPrice().multiply(new BigDecimal(quantity));
+
         return Sale.builder()
                 .client(client)
                 .book(book)
                 .salePrice(book.getPrice())
+                .quantity(quantity)
+                .totalPrice(totalPrice)
                 .build();
     }
 
     @Transactional
-    public Sale createSale(Long clientId, Long bookId) {
+    public Sale createSale(Long clientId, Long bookId, Integer quantity) {
         Client client = clientService.findById(clientId);
         Book book = bookService.findById(bookId);
 
-        if (book.getCount() < 1) {
+        if (book.getCount() < quantity) {
             throw new RuntimeException("Недоступно для продажи");
         }
 
-        Sale sale = buildSale(client, book);
-        bookService.sale(book.getId());
+        Sale sale = buildSale(client, book, quantity);
+        bookService.sale(book.getId(), quantity);
 
         Sale savedSale = saleRepository.save(sale);
-        log.info("Создана сделка {} клиентом {} на машину {}", savedSale.getId(), client.getId(), book.getId());
+        log.info("Создана сделка {} клиентом {} на книгу {} кол-во {}",
+                savedSale.getId(),
+                client.getId(),
+                book.getId(),
+                quantity);
 
         return savedSale;
     }
@@ -57,7 +66,7 @@ public class SaleServiceImpl implements SaleService {
         Sale sale = saleRepository.findById(id).orElseThrow(() -> new RuntimeException("Сделка не найдена" + id));
         Book book = sale.getBook();
 
-        bookService.recovery(book.getId());
+        bookService.recovery(book.getId(), sale.getQuantity());
         saleRepository.deleteById(id);
     }
 }

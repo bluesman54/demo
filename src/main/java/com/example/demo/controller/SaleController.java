@@ -26,8 +26,9 @@ public class SaleController {
 
     @PostMapping
     public String addSale(@RequestParam("clients") Long clientId,
-                          @RequestParam("book") Long bookId) {
-        saleService.createSale(clientId, bookId);
+                          @RequestParam("book") Long bookId,
+                          @RequestParam("quantity") Integer quantity) {
+        saleService.createSale(clientId, bookId, quantity);
         return "redirect:/sales";
     }
 

@@ -25,12 +25,18 @@ public class Sale {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
 
     @Column(name = "sale_price")
     private BigDecimal salePrice;
+
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    @Column(name = "total_Price")
+    private BigDecimal totalPrice;
 
     @CreationTimestamp
     @Column(name = "sale_time")

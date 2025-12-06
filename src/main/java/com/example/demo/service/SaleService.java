@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface SaleService {
     List<Sale> findAllSales();
-    Sale createSale(Long clientId, Long bookId);
+    Sale createSale(Long clientId, Long bookId, Integer quantity);
     void delete(Long id);
 }

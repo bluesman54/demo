@@ -40,14 +40,14 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(existingBook);
     }
 
-    public void sale(Long id) {
+    public void sale(Long id, Integer quantity) {
         Book book = findById(id);
-        book.setCount(book.getCount() - 1);
+        book.setCount(book.getCount() - quantity);
     }
 
-    public void recovery(Long id) {
+    public void recovery(Long id, Integer quantity) {
         Book book = findById(id);
-        book.setCount(book.getCount() + 1);
+        book.setCount(book.getCount() + quantity);
     }
 
     public void delete(Long id) {
